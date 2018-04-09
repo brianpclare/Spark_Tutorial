@@ -1,0 +1,90 @@
+---
+title: "Big Data and Spark"
+author: "Brian Clare"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Big Data
+
+We've been working with relatively small datasets in this class, but over the past 10-15 years as data science as a field has exploded, the size of datasets has increased dramatically as well, for several reasons
+
+* Increased connectivity (Internet of Things)
+* Increased internet usage overall, with higher speeds
+* Reduced cost of high-resolution cameras
+* Reduced cost of data storage
+
+
+## Parallel Processing
+
+Processor speed has plateaued over this time due to technical limitations, so the solution has been parallel processing - splitting the work over many processors.
+
+Coordinating tasks across multiple processors is not  simple, and so new computing engines are required. Hadoop MapReduce was an early example, but since its introduction Spark has become more commonly used. Spark was created by a team at UC Berkeley in 2009 and is currently part of the Apache Software Foundation, which also runs Hadoop, Apache HTTP Server, and many other projects, all of which are Open Source. The original developers of Spark founded a company called Databricks, which runs Spark conferences and offers training and a unified analytics platform.
+
+
+## How big is "Big"?
+
+R holds everything in memory (RAM), as we've discussed a bit before. Any dataset bigger than your RAM, you'll need some way of dealing with it other than R
+
+```{r echo = TRUE}
+# ?memory.limit
+memory.limit()
+```
+
+My laptop has 8GB of RAM, so that's about 8000 MB. Does that mean I can easily work with a 6GB csv dataframe? R dataframe needs to use more memory than the actual size on the HDD, about 4 times as much.
+
+There are methods to work with data on your hard drive that are too big for R. Python and other languages don't need to hold everything in RAM, neither does SQL.
+
+
+## "Big"
+
+In many real-world applications though, big data can be so big that it wouldn't even fit on your hard drive; internet streaming, financial transactions, high-def video editing, and genome mapping are all examples of sources that can create terabytes or petabytes of data.
+
+This is where Spark or some other way of parallelized computing is necessary.
+
+## What Spark Does
+
+* Spark doesn't store data
+    + Big data is often stored in Hadoop storage, or cloud services such as AWS or Azure
+* Spark is a unified framework of APIs to take many different kinds of data analysis processes and parallelize them effectively
+* Spark is extended by packages for SQL, machine learning, graph analytics, stream processing, and much more
+    + https://spark-packages.org/
+* Spark is written in a language called Scala, which is similar to Java, but there are APIs to interact with Spark using many languages, including R
+
+## How Spark Works
+
+* Processes: driver and executors. One driver directs everything, multiple executors run code on the pieces of data
+
+* Partitions: how your data is split up in physical storage
+
+* Parallelism: If you only have 1 partition, any number of executors will only result in parallelism of 1. Same if you have 1 executor on many partitions. Ideally you have N = number of executors = number of partitions
+
+## Transformations
+
+* A transformation is a command that tells Spark how to modify the data
+    + A narrow transformation means each input partition contributes to only one output partition
+    + Filtering is narrow
+    + A wide transformation, or shuffle, is when an input partition can contribute to more than one output partition
+    + Sorting is wide
+
+* Spark doesn't actually perform transformations right away or return anything from them, it uses them to create an explain plan of what it needs to do
+
+
+## Actions
+
+* An action is a command that makes Spark actually perform the plan and return a result
+    + Count is an action
+    + Collect is an action that will return the transformed data to R (since we're working in R)
+
+* Lazy evaluation: Spark compiles transformations and can shift the order of commands for reduced computation, e.g. filtering at the start instead of at the end
+    
+* A Spark plan is a Directed Acyclic Graph (DAG) starting with the source data, ending with an action
+
+## About Sparklyr
+
+
+
+

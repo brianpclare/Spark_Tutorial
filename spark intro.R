@@ -1,4 +1,4 @@
-install.packages("sparklyr")
+# install.packages("sparklyr")
 
 library(sparklyr)
 
@@ -9,12 +9,14 @@ spark_install(version = "2.2.1")
 conf <-  c(0)
 
 conf$`sparklyr.cores.local` <- 4
-conf$`sparklyr.shell.driver-memory` <- "16G"
+conf$`sparklyr.shell.driver-memory` <- "8G"
 conf$spark.memory.fraction <- 0.9
 
 sc <- spark_connect(master = "local", 
                     version = "2.2.1",
                     config = conf)
+# Wait...
+
 library(dplyr)
 library(nycflights13)
 library(ggplot2)
