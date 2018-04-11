@@ -8,9 +8,9 @@ spark_install(version = "2.2.1")
 
 conf <-  c(0)
 
-conf$`sparklyr.cores.local` <- 4
-conf$`sparklyr.shell.driver-memory` <- "8G"
-conf$spark.memory.fraction <- 0.9
+conf$`sparklyr.cores.local` <- 2
+conf$`sparklyr.shell.driver-memory` <- "3G"
+conf$spark.memory.fraction <- 0.8
 
 sc <- spark_connect(master = "local", 
                     version = "2.2.1",

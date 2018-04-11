@@ -22,7 +22,7 @@ We've been working with relatively small datasets in this class, but over the pa
 
 Processor speed has plateaued over this time due to technical limitations, so the solution has been parallel processing - splitting the work over many processors.
 
-Coordinating tasks across multiple processors is not  simple, and so new computing engines are required. Hadoop MapReduce was an early example, but since its introduction Spark has become more commonly used. Spark was created by a team at UC Berkeley in 2009 and is currently part of the Apache Software Foundation, which also runs Hadoop, Apache HTTP Server, and many other projects, all of which are Open Source. The original developers of Spark founded a company called Databricks, which runs Spark conferences and offers training and a unified analytics platform.
+Coordinating tasks across multiple processors is not  simple, and so new computing engines are required. Hadoop MapReduce was an early example, but since its introduction Spark has become more commonly used. Spark was created by a team at UC Berkeley in 2009 and is currently part of the Apache Software Foundation, which also hosts Hadoop, Apache HTTP Server, and many other projects, all of which are Open Source. The original developers of Spark founded a company called Databricks, which runs Spark conferences and offers training and a unified analytics platform.
 
 
 ## How big is "Big"?
@@ -43,7 +43,7 @@ There are methods to work with data on your hard drive that are too big for R. P
 
 In many real-world applications though, big data can be so big that it wouldn't even fit on your hard drive; internet streaming, financial transactions, high-def video editing, and genome mapping are all examples of sources that can create terabytes or petabytes of data.
 
-This is where Spark or some other way of parallelized computing is necessary.
+This is where Spark or some other way of distributed computing is necessary.
 
 ## What Spark Does
 
@@ -70,7 +70,7 @@ This is where Spark or some other way of parallelized computing is necessary.
     + A wide transformation, or shuffle, is when an input partition can contribute to more than one output partition
     + Sorting is wide
 
-* Spark doesn't actually perform transformations right away or return anything from them, it uses them to create an explain plan of what it needs to do
+* Spark doesn't actually perform transformations right away or return anything from them, it uses them to create a plan of what it needs to do
 
 
 ## Actions
@@ -83,8 +83,22 @@ This is where Spark or some other way of parallelized computing is necessary.
     
 * A Spark plan is a Directed Acyclic Graph (DAG) starting with the source data, ending with an action
 
+## Local Mode
+
+Although usually the purpose of Spark is to run on a large cluster, it can also be run on local mode entirely within your own computer
+
+If your processor has 2 or more cores, you can still benefit from parallelization
+
+At larger scales, local mode is mostly useful for prototyping, debugging, and testing
+
+
 ## About Sparklyr
 
+Sparklyr is a package developed by RStudio to interface with Spark.
+
+One of the major advantages of Sparklyr is that it allows you to write R code in dyplr, then it automatically converts those operations into equivalent SparkSQL that Spark needs to hear
+
+Sparklyr is also includes easy to use interface options with the RStudio IDE
 
 
 
