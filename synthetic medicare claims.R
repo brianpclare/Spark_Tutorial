@@ -28,7 +28,7 @@ outpatient$ICD9_DGNS_CD_1 <- icd_explain(outpatient$ICD9_DGNS_CD_1, condense = F
 
 ## Let's have a goal
 
-# For each doctor, find the most common ICD9 diagnosis and list how many times that doctor trated that
+# For each doctor, find the most common ICD9 diagnosis and list how many times that doctor treated that
 # primary diagnosis, but only if that happened at least 5 times
 
 
@@ -42,12 +42,20 @@ conf$`sparklyr.shell.driver-memory` <- "3G"
 conf$spark.memory.fraction <- 0.8
 
 sc <- spark_connect(master = "local", 
-                    version = "2.2.1",
+                    version = "2.2.0",
                     config = conf)
 
 
 
+claims_data <- spark_read_csv(sc, name = "claims_data", path = "outpatient claims.csv")
 
+claims_by_doctor <- claims_data %>% group_by(PRVDR_NUM, ICD9_DGNS_CD_1) %>% 
+  summarize(count = n()) %>% filter(count = max(count)) %>% filter(count >= 5)
+
+
+claims_by_doctor
+
+result <- collect(claims_by_doctor)
 
 
 

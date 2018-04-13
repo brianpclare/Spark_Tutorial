@@ -2,7 +2,7 @@
 
 library(sparklyr)
 
-spark_install(version = "2.2.1")
+spark_install(version = "2.2.0")
 
 # This may take a minute
 
@@ -13,7 +13,7 @@ conf$`sparklyr.shell.driver-memory` <- "3G"
 conf$spark.memory.fraction <- 0.8
 
 sc <- spark_connect(master = "local", 
-                    version = "2.2.1",
+                    version = "2.2.0",
                     config = conf)
 # Wait...
 
