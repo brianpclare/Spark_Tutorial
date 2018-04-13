@@ -7,6 +7,8 @@
 # Variable Guide
 # https://www.cms.gov/Research-Statistics-Data-and-Systems/Downloadable-Public-Use-Files/SynPUFs/Downloads/SynPUF_Codebook.pdf
 # page 7, page 
+
+
 library(tidyverse)
 library(sparklyr)
 
@@ -50,12 +52,32 @@ sc <- spark_connect(master = "local",
 claims_data <- spark_read_csv(sc, name = "claims_data", path = "outpatient claims.csv")
 
 claims_by_doctor <- claims_data %>% group_by(PRVDR_NUM, ICD9_DGNS_CD_1) %>% 
-  summarize(count = n()) %>% filter(count = max(count)) %>% filter(count >= 5)
+  summarize(count = n()) %>% filter(count >= 5)
 
 
 claims_by_doctor
 
 result <- collect(claims_by_doctor)
+
+ggplot(data = result) + geom_histogram(aes(x = count))
+
+
+claims_by_patient <- claims_data %>% group_by(DESYNPUF_ID) %>% select(DESYNPUF_ID, ICD9_DGNS_CD_1)
+
+# Charlson Comorbidity Index is a calculation based on ICD9 codes where larger numbers indicate greater
+# comorbidity (chance of death)
+
+claims_by_patient <- claims_by_patient %>% mutate(CCI = icd_charlson(claims_by_patient))
+
+claims_by_patient <- claims_by_patient %>% group_by(DESYNPUF_ID) %>% summarize(CCI = sum(CCI))
+
+patient_CCI <- collect(claims_by_patient)
+
+# Okay, why isn't this working?
+
+
+
+
 
 
 
